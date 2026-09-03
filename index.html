@@ -1,152 +1,43 @@
 <!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#235c3d" />
-  <title>Växtträning</title>
-  <style>
-    :root{--bg:#f4f7f2;--card:#fff;--ink:#173127;--muted:#64756d;--green:#235c3d;--green2:#dcebdd;--ok:#16794a;--bad:#b63f3f;--line:#d8e0da;--shadow:0 10px 30px rgba(34,72,52,.12)}
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#edf5ed 0,#f7f8f5 28%,#f4f7f2 100%);color:var(--ink);min-height:100vh}
-    button,input{font:inherit} button{cursor:pointer}
-    .wrap{max-width:760px;margin:auto;padding:18px 14px 38px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-    .brand{display:flex;align-items:center;gap:10px}.leaf{width:42px;height:42px;border-radius:14px;background:var(--green);display:grid;place-items:center;color:white;font-size:23px;box-shadow:var(--shadow)}
-    h1{font-size:clamp(24px,6vw,34px);margin:0;letter-spacing:-.03em}.sub{color:var(--muted);font-size:14px;margin-top:2px}
-    .card{background:var(--card);border:1px solid rgba(35,92,61,.11);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
-    .topbar{padding:16px 18px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}.pill{font-size:13px;font-weight:700;color:var(--green);background:var(--green2);padding:7px 10px;border-radius:999px}.score{font-size:14px;color:var(--muted);font-weight:700}
-    .progress{height:8px;background:#e9eee9;margin:14px 18px 0;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--green);width:0;transition:width .25s ease}
-    .photo-wrap{margin:18px 18px 0;position:relative;border-radius:20px;overflow:hidden;background:#e7ece7;aspect-ratio:4/3}.photo{width:100%;height:100%;display:block;object-fit:cover}.photo-wrap.loading:after{content:"Laddar bild…";position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:700;background:#eef3ee}.credit{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.58);color:#fff;text-decoration:none;font-size:11px;padding:5px 8px;border-radius:999px;backdrop-filter:blur(6px)}
-    .body{padding:19px 18px 20px}.question{font-size:22px;font-weight:800;text-align:center;margin:0 0 14px}.hint{font-size:13px;text-align:center;color:var(--muted);margin:-7px 0 15px}
-    .answer-row{display:flex;gap:9px}.answer{flex:1;min-width:0;border:2px solid var(--line);border-radius:15px;padding:14px 15px;outline:none;background:#fff;font-size:18px}.answer:focus{border-color:#6e9b7d;box-shadow:0 0 0 4px rgba(35,92,61,.1)}
-    .primary,.secondary,.ghost{border:0;border-radius:15px;padding:13px 17px;font-weight:800}.primary{background:var(--green);color:#fff;min-width:112px}.primary:active{transform:translateY(1px)}.secondary{background:#e9f0ea;color:var(--green)}.ghost{background:transparent;color:var(--muted);padding:9px 12px}
-    .feedback{min-height:50px;margin-top:12px;border-radius:15px;padding:12px 14px;display:none;font-weight:700}.feedback.show{display:block}.feedback.ok{background:#e4f5eb;color:var(--ok)}.feedback.bad{background:#fde9e7;color:var(--bad)}.feedback small{display:block;font-weight:600;margin-top:3px;color:inherit;opacity:.83}
-    .actions{display:flex;justify-content:center;gap:9px;margin-top:13px;flex-wrap:wrap}.hidden{display:none!important}
-    .menu{padding:22px}.menu h2{margin:0 0 6px;font-size:26px}.menu p{color:var(--muted);line-height:1.5;margin:0 0 18px}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mode{padding:18px;border:2px solid var(--line);border-radius:18px;background:#fff;text-align:left;color:var(--ink)}.mode strong{display:block;font-size:18px;margin-bottom:4px}.mode span{font-size:13px;color:var(--muted);line-height:1.35;display:block}.mode:hover{border-color:#8aaa95;background:#fbfdfb}
-    .plants{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.plants-title{font-weight:800;margin-bottom:9px}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{font-size:13px;padding:6px 9px;border-radius:999px;background:#f0f3f0;color:#4b5f54}
-    .finish{text-align:center;padding:30px 20px}.finish .big{font-size:60px;line-height:1}.finish h2{font-size:28px;margin:10px 0 4px}.result{font-size:22px;font-weight:900;color:var(--green);margin:8px 0}.review{text-align:left;margin:20px auto 0;max-width:540px}.review-row{display:flex;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid var(--line);font-size:14px}.wrong{color:var(--bad);font-weight:700}.right{color:var(--ok);font-weight:700}
-    footer{text-align:center;color:var(--muted);font-size:12px;margin-top:16px}.sources-btn{background:none;border:0;color:var(--green);text-decoration:underline;padding:0;font-size:12px}.sources{margin-top:12px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;line-height:1.5}.sources a{color:var(--green)}
-    @media(max-width:560px){.wrap{padding:10px 9px 28px}.sub{display:none}.card{border-radius:20px}.photo-wrap{margin:14px 12px 0;aspect-ratio:1/1}.body{padding:16px 12px 18px}.topbar{padding:14px 12px 0}.progress{margin:12px 12px 0}.answer-row{flex-direction:column}.primary{width:100%;padding:14px}.mode-grid{grid-template-columns:1fr}.menu{padding:20px 15px}.question{font-size:20px}}
-  </style>
-</head>
-<body>
-  <main class="wrap">
-    <header>
-      <div class="brand"><div class="leaf">🌿</div><div><h1>Växtträning</h1><div class="sub">Träna på växterna från läxan</div></div></div>
-      <button id="homeBtn" class="ghost hidden" type="button">Start</button>
-    </header>
-
-    <section id="menu" class="card menu">
-      <h2>Hur vill du träna?</h2>
-      <p>Åtta växter visas i slumpmässig ordning. Skriv växtens svenska namn.</p>
-      <div class="mode-grid">
-        <button class="mode" data-mode="practice"><strong>🌱 Öva</strong><span>Du får direkt veta om svaret är rätt och kan försöka igen.</span></button>
-        <button class="mode" data-mode="test"><strong>🎯 Prov</strong><span>Ett svar per växt. Resultatet visas först när alla åtta är klara.</span></button>
-      </div>
-      <div class="plants"><div class="plants-title">Växter i träningen</div><div class="chips" id="chips"></div></div>
-    </section>
-
-    <section id="quiz" class="card hidden" aria-live="polite">
-      <div class="topbar"><span id="modePill" class="pill">Öva</span><span id="score" class="score">1 / 8</span></div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="photoWrap" class="photo-wrap loading">
-        <img id="photo" class="photo" alt="Växt att identifiera" />
-        <a id="credit" class="credit" target="_blank" rel="noopener">Bildkälla</a>
-      </div>
-      <div class="body">
-        <p class="question">Vad heter växten?</p>
-        <p class="hint">Skriv namnet på svenska.</p>
-        <form id="answerForm" class="answer-row">
-          <input id="answer" class="answer" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Skriv växtens namn…" aria-label="Växtens namn" />
-          <button class="primary" type="submit">Svara</button>
-        </form>
-        <div id="feedback" class="feedback"></div>
-        <div class="actions">
-          <button id="showAnswer" class="secondary hidden" type="button">Visa svaret</button>
-          <button id="nextBtn" class="primary hidden" type="button">Nästa</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="finish" class="card finish hidden">
-      <div class="big">🏁</div><h2>Klart!</h2><div id="result" class="result"></div><p id="resultText"></p>
-      <div id="review" class="review"></div>
-      <div class="actions"><button id="againBtn" class="primary" type="button">Nytt prov</button><button id="backBtn" class="secondary" type="button">Till startsidan</button></div>
-    </section>
-
-    <footer>
-      Bilder: Wikimedia Commons · <button id="sourcesBtn" class="sources-btn" type="button">visa bildkällor</button>
-      <div id="sources" class="sources hidden"></div>
-    </footer>
-  </main>
-
-<script>
-const plants = [
-  {name:'Rölleka', aliases:['rolleka','rölleka'], latin:'Achillea millefolium', file:'Achillea millefolium (flower).jpg', source:'https://commons.wikimedia.org/wiki/File:Achillea_millefolium_(flower).jpg'},
-  {name:'Gatkamomill', aliases:['gatkamomill'], latin:'Matricaria discoidea', file:'Matricaria discoidea.jpg', source:'https://commons.wikimedia.org/wiki/File:Matricaria_discoidea.jpg'},
-  {name:'Vitklöver', aliases:['vitklover','vitklöver'], latin:'Trifolium repens', file:'Trifolium repens 001.JPG', source:'https://commons.wikimedia.org/wiki/File:Trifolium_repens_001.JPG'},
-  {name:'Trampgräs', aliases:['trampgras','trampgräs'], latin:'Polygonum aviculare', file:'Polygonum aviculare, Gewoon varkensgras plant.jpg', source:'https://commons.wikimedia.org/wiki/File:Polygonum_aviculare,_Gewoon_varkensgras_plant.jpg'},
-  {name:'Våtarv', aliases:['vatarv','våtarv'], latin:'Stellaria media', file:'20180131Stellaria media.jpg', source:'https://commons.wikimedia.org/wiki/File:20180131Stellaria_media.jpg'},
-  {name:'Gåsört', aliases:['gasort','gåsört'], latin:'Potentilla anserina', file:'PotentillaAnserina.jpg', source:'https://commons.wikimedia.org/wiki/File:PotentillaAnserina.jpg'},
-  {name:'Groblad', aliases:['groblad'], latin:'Plantago major', file:'Plantago major 1.jpg', source:'https://commons.wikimedia.org/wiki/File:Plantago_major_1.jpg'},
-  {name:'Maskros', aliases:['maskros'], latin:'Taraxacum officinale', file:'Taraxacum Officinale.jpg', source:'https://commons.wikimedia.org/wiki/File:Taraxacum_Officinale.jpg'}
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#235c3d">
+<title>Växtträning</title>
+<style>
+:root{--ink:#173127;--muted:#64756d;--green:#235c3d;--green2:#dcebdd;--ok:#16794a;--bad:#b63f3f;--line:#d8e0da;--shadow:0 10px 30px rgba(34,72,52,.12)}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#edf5ed,#f7f8f5 28%,#f4f7f2);color:var(--ink);min-height:100vh}button,input{font:inherit}button{cursor:pointer}.wrap{max-width:760px;margin:auto;padding:18px 14px 38px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:10px}.leaf{width:42px;height:42px;border-radius:14px;background:var(--green);display:grid;place-items:center;color:#fff;font-size:23px;box-shadow:var(--shadow)}h1{font-size:clamp(24px,6vw,34px);margin:0;letter-spacing:-.03em}.sub{color:var(--muted);font-size:14px;margin-top:2px}.card{background:#fff;border:1px solid rgba(35,92,61,.11);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}.topbar{padding:16px 18px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}.pill{font-size:13px;font-weight:700;color:var(--green);background:var(--green2);padding:7px 10px;border-radius:999px}.score{font-size:14px;color:var(--muted);font-weight:700}.progress{height:8px;background:#e9eee9;margin:14px 18px 0;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--green);width:0;transition:width .25s}.photo-wrap{margin:18px 18px 0;position:relative;border-radius:20px;overflow:hidden;background:#e7ece7;aspect-ratio:4/3}.photo{width:100%;height:100%;display:block;object-fit:cover}.photo-wrap.loading:after{content:"Laddar bild…";position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:700;background:#eef3ee}.credit{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.62);color:#fff;text-decoration:none;font-size:11px;padding:5px 8px;border-radius:999px}.body{padding:19px 18px 20px}.question{font-size:22px;font-weight:800;text-align:center;margin:0 0 14px}.hint{font-size:13px;text-align:center;color:var(--muted);margin:-7px 0 15px}.answer-row{display:flex;gap:9px}.answer{flex:1;min-width:0;border:2px solid var(--line);border-radius:15px;padding:14px 15px;outline:none;background:#fff;font-size:18px}.answer:focus{border-color:#6e9b7d;box-shadow:0 0 0 4px rgba(35,92,61,.1)}.primary,.secondary,.ghost{border:0;border-radius:15px;padding:13px 17px;font-weight:800}.primary{background:var(--green);color:#fff;min-width:112px}.secondary{background:#e9f0ea;color:var(--green)}.ghost{background:transparent;color:var(--muted);padding:9px 12px}.feedback{min-height:50px;margin-top:12px;border-radius:15px;padding:12px 14px;display:none;font-weight:700}.feedback.show{display:block}.feedback.ok{background:#e4f5eb;color:var(--ok)}.feedback.bad{background:#fde9e7;color:var(--bad)}.feedback small{display:block;font-weight:600;margin-top:3px;opacity:.83}.actions{display:flex;justify-content:center;gap:9px;margin-top:13px;flex-wrap:wrap}.hidden{display:none!important}.menu{padding:22px}.menu h2{margin:0 0 6px;font-size:26px}.menu p{color:var(--muted);line-height:1.5;margin:0 0 18px}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mode{padding:18px;border:2px solid var(--line);border-radius:18px;background:#fff;text-align:left;color:var(--ink)}.mode strong{display:block;font-size:18px;margin-bottom:4px}.mode span{font-size:13px;color:var(--muted);line-height:1.35;display:block}.plants{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.plants-title{font-weight:800;margin-bottom:9px}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{font-size:13px;padding:6px 9px;border-radius:999px;background:#f0f3f0;color:#4b5f54}.finish{text-align:center;padding:30px 20px}.finish .big{font-size:60px;line-height:1}.finish h2{font-size:28px;margin:10px 0 4px}.result{font-size:22px;font-weight:900;color:var(--green);margin:8px 0}.review{text-align:left;margin:20px auto 0;max-width:540px}.review-row{display:flex;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid var(--line);font-size:14px}.wrong{color:var(--bad);font-weight:700}.right{color:var(--ok);font-weight:700}footer{text-align:center;color:var(--muted);font-size:12px;margin-top:16px}.sources-btn{background:none;border:0;color:var(--green);text-decoration:underline;padding:0;font-size:12px}.sources{margin-top:12px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;line-height:1.5}.sources a{color:var(--green)}.source-plant{margin:10px 0 3px;font-weight:800}.source-img{margin-left:10px}
+@media(max-width:560px){.wrap{padding:10px 9px 28px}.sub{display:none}.card{border-radius:20px}.photo-wrap{margin:14px 12px 0;aspect-ratio:1/1}.body{padding:16px 12px 18px}.topbar{padding:14px 12px 0}.progress{margin:12px 12px 0}.answer-row{flex-direction:column}.primary{width:100%;padding:14px}.mode-grid{grid-template-columns:1fr}.menu{padding:20px 15px}.question{font-size:20px}}
+</style>
+</head><body><main class="wrap">
+<header><div class="brand"><div class="leaf">🌿</div><div><h1>Växtträning</h1><div class="sub">Träna på växterna från läxan</div></div></div><button id="homeBtn" class="ghost hidden" type="button">Start</button></header>
+<section id="menu" class="card menu"><h2>Hur vill du träna?</h2><p>Åtta växter visas i slumpmässig ordning. Varje växt har flera bilder och en bild väljs slumpmässigt vid varje omgång.</p><div class="mode-grid"><button class="mode" data-mode="practice"><strong>🌱 Öva</strong><span>Du får direkt veta om svaret är rätt och kan försöka igen.</span></button><button class="mode" data-mode="test"><strong>🎯 Prov</strong><span>Ett svar per växt. Resultatet visas först när alla åtta är klara.</span></button></div><div class="plants"><div class="plants-title">Växter i träningen</div><div class="chips" id="chips"></div></div></section>
+<section id="quiz" class="card hidden" aria-live="polite"><div class="topbar"><span id="modePill" class="pill">Öva</span><span id="score" class="score">1 / 8</span></div><div class="progress"><div id="progressBar"></div></div><div id="photoWrap" class="photo-wrap loading"><img id="photo" class="photo" alt="Växt att identifiera"><a id="credit" class="credit" target="_blank" rel="noopener">Bildkälla</a></div><div class="body"><p class="question">Vad heter växten?</p><p class="hint">Skriv namnet på svenska.</p><form id="answerForm" class="answer-row"><input id="answer" class="answer" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Skriv växtens namn…" aria-label="Växtens namn"><button class="primary" type="submit">Svara</button></form><div id="feedback" class="feedback"></div><div class="actions"><button id="showAnswer" class="secondary hidden" type="button">Visa svaret</button><button id="nextBtn" class="primary hidden" type="button">Nästa</button></div></div></section>
+<section id="finish" class="card finish hidden"><div class="big">🏁</div><h2>Klart!</h2><div id="result" class="result"></div><p id="resultText"></p><div id="review" class="review"></div><div class="actions"><button id="againBtn" class="primary" type="button">Nytt prov</button><button id="backBtn" class="secondary" type="button">Till startsidan</button></div></section>
+<footer>Bilder: Wikimedia Commons · <button id="sourcesBtn" class="sources-btn" type="button">visa bildkällor</button><div id="sources" class="sources hidden"></div></footer>
+</main><script>
+const plants=[
+{name:'Rölleka',aliases:['rolleka','rölleka'],latin:'Achillea millefolium',images:['20170428Achillea millefolium6.jpg','20170602Achillea millefolium3.jpg','20180627Achillea millefolium.jpg']},
+{name:'Gatkamomill',aliases:['gatkamomill'],latin:'Matricaria discoidea',images:['20140419Matricaria discoidea1.jpg','20170517Matricaria discoidea1.jpg','20170517Matricaria discoidea3.jpg']},
+{name:'Vitklöver',aliases:['vitklover','vitklöver'],latin:'Trifolium repens',images:['20170503Trifolium repens1.jpg','20200623Trifolium repens3.jpg','20170714Trifolium repens2.jpg']},
+{name:'Trampgräs',aliases:['trampgras','trampgräs'],latin:'Polygonum aviculare',images:['20170430Polygonum aviculare1.jpg','20170430Polygonum aviculare2.jpg','20180518Polygonum aviculare1.jpg']},
+{name:'Våtarv',aliases:['vatarv','våtarv'],latin:'Stellaria media',images:['20130106Stellaria media1.jpg','20180131Stellaria media.jpg','20210325Stellaria media1.jpg']},
+{name:'Gåsört',aliases:['gasort','gåsört'],latin:'Potentilla anserina',images:['20170516Potentilla anserina1.jpg','20170525Potentilla anserina1.jpg','20180603Potentilla anserina1.jpg']},
+{name:'Groblad',aliases:['groblad'],latin:'Plantago major',images:['20170513Plantago major1.jpg','20170513Plantago major2.jpg','20170612Plantago major.jpg']},
+{name:'Maskros',aliases:['maskros'],latin:'Taraxacum officinale',images:['Taraxacum Officinale.jpg','Taraxacum officinale 04.jpg','Taraxacum officinale 06.jpg']}
 ];
-
-const $ = id => document.getElementById(id);
-const menu=$('menu'), quiz=$('quiz'), finish=$('finish'), photo=$('photo'), photoWrap=$('photoWrap'), answer=$('answer'), feedback=$('feedback'), nextBtn=$('nextBtn'), showAnswer=$('showAnswer');
-let mode='practice', order=[], index=0, correct=0, attempts=0, locked=false, answers=[];
-
-function imageUrl(file){ return 'https://commons.wikimedia.org/wiki/Special:Redirect/file/' + encodeURIComponent(file) + '?width=1200'; }
-function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; }
-function normalize(s){ return s.trim().toLocaleLowerCase('sv-SE').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,''); }
-function isCorrect(value, p){ return p.aliases.some(a => normalize(a)===normalize(value)); }
-
-function start(newMode){
-  mode=newMode; order=shuffle(plants); index=0; correct=0; attempts=0; locked=false; answers=[];
-  menu.classList.add('hidden'); finish.classList.add('hidden'); quiz.classList.remove('hidden'); $('homeBtn').classList.remove('hidden');
-  $('modePill').textContent = mode==='practice' ? '🌱 Öva' : '🎯 Prov';
-  render();
-}
-function render(){
-  const p=order[index]; locked=false; attempts=0; answer.value=''; answer.disabled=false; feedback.className='feedback'; feedback.textContent=''; nextBtn.classList.add('hidden'); showAnswer.classList.toggle('hidden', mode!=='practice');
-  $('score').textContent=`${index+1} / ${order.length}`; $('progressBar').style.width=`${(index/order.length)*100}%`;
-  photoWrap.classList.add('loading'); photo.alt='Växt att identifiera'; photo.src=imageUrl(p.file); $('credit').href=p.source;
-  photo.onload=()=>photoWrap.classList.remove('loading'); photo.onerror=()=>{photoWrap.classList.remove('loading'); photo.alt='Bilden kunde inte laddas. Prova att ladda om sidan.'};
-  setTimeout(()=>answer.focus(),100);
-}
-function submit(){
-  if(locked) return;
-  const value=answer.value.trim(); if(!value){answer.focus();return;}
-  const p=order[index], ok=isCorrect(value,p); attempts++;
-  if(mode==='test'){
-    if(ok) correct++; answers.push({plant:p.name,given:value,ok}); locked=true; nextBtn.classList.remove('hidden'); answer.disabled=true; feedback.className='feedback show'; feedback.textContent='Svaret är sparat.'; showAnswer.classList.add('hidden');
-  } else if(ok){
-    correct++; answers.push({plant:p.name,given:value,ok:true}); locked=true; answer.disabled=true; feedback.className='feedback show ok'; feedback.innerHTML='✓ Rätt! <small>'+p.name+'</small>'; nextBtn.classList.remove('hidden'); showAnswer.classList.add('hidden');
-  } else {
-    feedback.className='feedback show bad'; feedback.innerHTML='Inte riktigt. Försök igen!'; answer.select();
-  }
-}
-function next(){ index++; if(index>=order.length) end(); else render(); }
-function end(){
-  quiz.classList.add('hidden'); finish.classList.remove('hidden'); $('homeBtn').classList.add('hidden'); $('progressBar').style.width='100%';
-  if(mode==='test'){
-    $('result').textContent=`${correct} / ${order.length} rätt`;
-    $('resultText').textContent= correct===8 ? 'Perfekt resultat! 🌟' : correct>=6 ? 'Mycket bra! 👏' : 'Bra träning — prova gärna en gång till.';
-    $('review').innerHTML=answers.map(a=>`<div class="review-row"><span>${escapeHtml(a.plant)}</span><span class="${a.ok?'right':'wrong'}">${a.ok?'✓':'✗ '+escapeHtml(a.given)}</span></div>`).join('');
-  } else {
-    $('result').textContent='Alla 8 växter tränade'; $('resultText').textContent='Bra jobbat!'; $('review').innerHTML='';
-  }
-}
-function goHome(){ quiz.classList.add('hidden'); finish.classList.add('hidden'); menu.classList.remove('hidden'); $('homeBtn').classList.add('hidden'); }
-function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
-$('answerForm').addEventListener('submit',e=>{e.preventDefault();submit()}); nextBtn.addEventListener('click',next);
-showAnswer.addEventListener('click',()=>{const p=order[index]; feedback.className='feedback show bad'; feedback.innerHTML=`Rätt svar är <strong>${p.name}</strong>.`; locked=true; answer.disabled=true; answers.push({plant:p.name,given:'—',ok:false}); nextBtn.classList.remove('hidden'); showAnswer.classList.add('hidden');});
-document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.mode)));
-$('againBtn').addEventListener('click',()=>start('test')); $('backBtn').addEventListener('click',goHome); $('homeBtn').addEventListener('click',goHome);
-$('chips').innerHTML=plants.map(p=>`<span class="chip">${p.name}</span>`).join('');
-$('sources').innerHTML=plants.map(p=>`<div><a href="${p.source}" target="_blank" rel="noopener">${p.name}</a> — <em>${p.latin}</em>, Wikimedia Commons</div>`).join('');
-$('sourcesBtn').addEventListener('click',()=>{$('sources').classList.toggle('hidden'); $('sourcesBtn').textContent=$('sources').classList.contains('hidden')?'visa bildkällor':'dölj bildkällor';});
-</script>
-</body>
-</html>
+const $=id=>document.getElementById(id),menu=$('menu'),quiz=$('quiz'),finish=$('finish'),photo=$('photo'),photoWrap=$('photoWrap'),answer=$('answer'),feedback=$('feedback'),nextBtn=$('nextBtn'),showAnswer=$('showAnswer');let mode='practice',order=[],index=0,correct=0,locked=false,answers=[],currentImage=null;const lastImageByPlant={};
+function commonsPage(file){return 'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file).replace(/%20/g,'_')}
+function imageUrl(file){return 'https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(file)+'?width=1200'}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function normalize(s){return s.trim().toLocaleLowerCase('sv-SE').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,'')}
+function isCorrect(v,p){return p.aliases.some(a=>normalize(a)===normalize(v))}
+function chooseImage(p){let choices=p.images.filter(x=>x!==lastImageByPlant[p.name]);if(!choices.length)choices=p.images;const f=choices[Math.floor(Math.random()*choices.length)];lastImageByPlant[p.name]=f;return f}
+function start(newMode){mode=newMode;order=shuffle(plants);index=0;correct=0;locked=false;answers=[];menu.classList.add('hidden');finish.classList.add('hidden');quiz.classList.remove('hidden');$('homeBtn').classList.remove('hidden');$('modePill').textContent=mode==='practice'?'🌱 Öva':'🎯 Prov';render()}
+function loadImage(p){let remaining=shuffle(p.images.filter(x=>x!==currentImage));if(!remaining.length)remaining=shuffle(p.images);const tryNext=()=>{const f=remaining.shift();if(!f){photoWrap.classList.remove('loading');photo.alt='Bilden kunde inte laddas. Prova att ladda om sidan.';return}currentImage=f;photoWrap.classList.add('loading');$('credit').href=commonsPage(f);photo.onload=()=>photoWrap.classList.remove('loading');photo.onerror=tryNext;photo.src=imageUrl(f)};tryNext()}
+function render(){const p=order[index];locked=false;answer.value='';answer.disabled=false;feedback.className='feedback';feedback.textContent='';nextBtn.classList.add('hidden');showAnswer.classList.toggle('hidden',mode!=='practice');$('score').textContent=`${index+1} / ${order.length}`;$('progressBar').style.width=`${index/order.length*100}%`;currentImage=chooseImage(p);photoWrap.classList.add('loading');photo.alt='Växt att identifiera';$('credit').href=commonsPage(currentImage);photo.onload=()=>photoWrap.classList.remove('loading');photo.onerror=()=>loadImage(p);photo.src=imageUrl(currentImage);setTimeout(()=>answer.focus(),100)}
+function submit(){if(locked)return;const value=answer.value.trim();if(!value){answer.focus();return}const p=order[index],ok=isCorrect(value,p);if(mode==='test'){if(ok)correct++;answers.push({plant:p.name,given:value,ok});locked=true;nextBtn.classList.remove('hidden');answer.disabled=true;feedback.className='feedback show';feedback.textContent='Svaret är sparat.';showAnswer.classList.add('hidden')}else if(ok){correct++;answers.push({plant:p.name,given:value,ok:true});locked=true;answer.disabled=true;feedback.className='feedback show ok';feedback.innerHTML='✓ Rätt! <small>'+p.name+'</small>';nextBtn.classList.remove('hidden');showAnswer.classList.add('hidden')}else{feedback.className='feedback show bad';feedback.textContent='Inte riktigt. Försök igen!';answer.select()}}
+function next(){index++;index>=order.length?end():render()}
+function end(){quiz.classList.add('hidden');finish.classList.remove('hidden');$('homeBtn').classList.add('hidden');if(mode==='test'){$('result').textContent=`${correct} / ${order.length} rätt`;$('resultText').textContent=correct===8?'Perfekt resultat! 🌟':correct>=6?'Mycket bra! 👏':'Bra träning — prova gärna en gång till.';$('review').innerHTML=answers.map(a=>`<div class="review-row"><span>${esc(a.plant)}</span><span class="${a.ok?'right':'wrong'}">${a.ok?'✓':'✗ '+esc(a.given)}</span></div>`).join('')}else{$('result').textContent='Alla 8 växter tränade';$('resultText').textContent='Bra jobbat!';$('review').innerHTML=''}}
+function goHome(){quiz.classList.add('hidden');finish.classList.add('hidden');menu.classList.remove('hidden');$('homeBtn').classList.add('hidden')}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+$('answerForm').addEventListener('submit',e=>{e.preventDefault();submit()});nextBtn.addEventListener('click',next);showAnswer.addEventListener('click',()=>{const p=order[index];feedback.className='feedback show bad';feedback.innerHTML=`Rätt svar är <strong>${p.name}</strong>.`;locked=true;answer.disabled=true;answers.push({plant:p.name,given:'—',ok:false});nextBtn.classList.remove('hidden');showAnswer.classList.add('hidden')});document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.mode)));$('againBtn').addEventListener('click',()=>start('test'));$('backBtn').addEventListener('click',goHome);$('homeBtn').addEventListener('click',goHome);$('chips').innerHTML=plants.map(p=>`<span class="chip">${p.name}</span>`).join('');$('sources').innerHTML=plants.map(p=>`<div class="source-plant">${p.name} — <em>${p.latin}</em></div>`+p.images.map((f,i)=>`<div class="source-img"><a href="${commonsPage(f)}" target="_blank" rel="noopener">Bild ${i+1}</a></div>`).join('')).join('');$('sourcesBtn').addEventListener('click',()=>{$('sources').classList.toggle('hidden');$('sourcesBtn').textContent=$('sources').classList.contains('hidden')?'visa bildkällor':'dölj bildkällor'});
+</script></body></html>
