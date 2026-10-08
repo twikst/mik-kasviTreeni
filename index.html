@@ -179,16 +179,16 @@ const sets={
   },
   trees:{
     title:'Träd',
-    intro:'Sex vanliga träd visas i slumpmässig ordning. Bilderna varierar mellan blad, barr, bark, frukter och hela träd.',
+    intro:'Sex vanliga träd visas i slumpmässig ordning. Cirka 80 % av frågorna visar hela träd och cirka 20 % visar blad eller barr.',
     question:'Vilket träd är detta?',
     imageAlt:'Träd att identifiera',
     items:[
-      {id:'bjork',name:'Björk',aliases:['bjork','björk','vartbjork','vårtbjörk'],latin:'Betula pendula',images:['Betula pendula leaves.jpg','Betula pendula bark.jpg','Betula pendula tree.jpg']},
-      {id:'asp',name:'Asp',aliases:['asp'],latin:'Populus tremula',images:['Populus tremula leaf.jpg','Populus tremula bark.jpg','Populus tremula Topola osika 2020-07-02 02.jpg']},
-      {id:'ronn',name:'Rönn',aliases:['ronn','rönn'],latin:'Sorbus aucuparia',images:['Sorbus aucuparia.leaf.jpg','Sorbus aucuparia berries.jpg','Sorbus-aucuparia.JPG']},
-      {id:'lind',name:'Lind',aliases:['lind'],latin:'Tilia cordata',images:['Tilia cordata leaf.jpg','Tilia cordata fruits.jpg','Tilia cordata tree, Ada Ciganlija.jpg']},
-      {id:'gran',name:'Gran',aliases:['gran'],latin:'Picea abies',images:['Needles of European spruce (Picea Abies), Vollersroda, Thuringia, Germany 03.jpg','Picea abies cone.jpg','Picea abies single tree.jpg']},
-      {id:'tall',name:'Tall',aliases:['tall'],latin:'Pinus sylvestris',images:['Pinus sylvestris 2026 G1.jpg','Pinus sylvestris 2026 G2.jpg','Pinus sylvestris tree.jpg']}
+      {id:'bjork',name:'Björk',aliases:['bjork','björk','vartbjork','vårtbjörk'],latin:'Betula pendula',treeImages:['Betula pendula tree.jpg','Betula pendula Finland.jpg','Betula Pendula at Stockholm University 2005-07-01.jpg'],detailImages:['Betula pendula leaves.jpg']},
+      {id:'asp',name:'Asp',aliases:['asp'],latin:'Populus tremula',treeImages:['Populus tremula Topola osika 2020-07-02 02.jpg','Topola Osika Park Schoena 1 Maja w Sosnowcu1046.jpg','Populus tremula Tampere.jpg'],detailImages:['Populus tremula leaf.jpg']},
+      {id:'ronn',name:'Rönn',aliases:['ronn','rönn'],latin:'Sorbus aucuparia',treeImages:['Rowan tree.jpg','Sorbus-aucuparia.JPG','Young trees of Sorbus aucuparia.jpg'],detailImages:['Sorbus aucuparia leaves.jpg']},
+      {id:'lind',name:'Lind',aliases:['lind'],latin:'Tilia cordata',treeImages:['Tilia cordata tree, Ada Ciganlija.jpg','Tilia cordata, young trees.JPG','Tilia cordata (New Belgrade, Serbia) 06.jpg'],detailImages:['Tilia cordata leaf.jpg']},
+      {id:'gran',name:'Gran',aliases:['gran'],latin:'Picea abies',treeImages:['Picea abies tree.JPG','Picea abies single tree.jpg','Picea abies.jpg'],detailImages:['Needles of European spruce (Picea Abies), Vollersroda, Thuringia, Germany 03.jpg']},
+      {id:'tall',name:'Tall',aliases:['tall'],latin:'Pinus sylvestris',treeImages:['Pinus sylvestris tree.jpg','PinusSylvestris.jpg','20140625Pinus sylvestris.jpg'],detailImages:['Pinus sylvestris 2026 G2.jpg']}
     ]
   }
 };
@@ -206,10 +206,20 @@ function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Ma
 function normalize(s){return s.trim().toLocaleLowerCase('sv-SE').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,'')}
 function isCorrect(v,p){return p.aliases.some(a=>normalize(a)===normalize(v))}
 function imageKey(p){return setKey+':'+p.id}
+function allImages(p){return p.images||[...(p.treeImages||[]),...(p.detailImages||[])]}
 function chooseImage(p){
   const key=imageKey(p);
-  let choices=p.images.filter(x=>x!==lastImageByItem[key]);
-  if(!choices.length)choices=p.images;
+  let pool;
+  if(p.treeImages||p.detailImages){
+    const treeImages=p.treeImages||[],detailImages=p.detailImages||[];
+    const useWholeTree=treeImages.length>0&&(detailImages.length===0||Math.random()<0.8);
+    pool=useWholeTree?treeImages:detailImages;
+    if(!pool.length)pool=treeImages.length?treeImages:detailImages;
+  }else{
+    pool=p.images;
+  }
+  let choices=pool.filter(x=>x!==lastImageByItem[key]);
+  if(!choices.length)choices=pool;
   const f=choices[Math.floor(Math.random()*choices.length)];
   lastImageByItem[key]=f;
   return f;
@@ -232,7 +242,7 @@ function start(newMode){
 }
 function loadItemImage(p){
   const first=chooseImage(p);
-  const candidates=[first].concat(shuffle(p.images.filter(f=>f!==first)));
+  const candidates=[first].concat(shuffle(allImages(p).filter(f=>f!==first)));
   const tryNext=()=>{
     const f=candidates.shift();
     if(!f){photoWrap.classList.remove('loading');photo.removeAttribute('src');photo.alt='Bilden kunde inte laddas. Prova att ladda om sidan.';return}
@@ -298,7 +308,7 @@ $('homeBtn').addEventListener('click',showCategories);
 
 $('sources').innerHTML=Object.keys(sets).map(key=>{
   const s=sets[key];
-  return '<div class="source-set">'+esc(s.title)+'</div>'+s.items.map(p=>'<div class="source-item">'+esc(p.name)+' — <em>'+esc(p.latin)+'</em></div>'+p.images.map((f,i)=>'<div class="source-img"><a href="'+commonsPage(f)+'" target="_blank" rel="noopener">Bild '+(i+1)+'</a></div>').join('')).join('');
+  return '<div class="source-set">'+esc(s.title)+'</div>'+s.items.map(p=>'<div class="source-item">'+esc(p.name)+' — <em>'+esc(p.latin)+'</em></div>'+allImages(p).map((f,i)=>'<div class="source-img"><a href="'+commonsPage(f)+'" target="_blank" rel="noopener">Bild '+(i+1)+'</a></div>').join('')).join('');
 }).join('');
 $('sourcesBtn').addEventListener('click',()=>{
   $('sources').classList.toggle('hidden');
