@@ -16,13 +16,11 @@ En enkel mobilvänlig webbsida för att träna växter och vanliga träd på sve
 ## Träd
 
 - Björk
-- Tall
-- Gran
 - Asp
 - Rönn
-- Lönn
-- Ek
-- Al
+- Lind
+- Gran
+- Tall
 
 Varje art har flera bilder och en bild väljs slumpmässigt vid varje omgång. Sidan använder Wikimedia Commons -kuvia ja näyttää kuvien lähdelinkit sivun alareunassa.
 
