@@ -1,6 +1,6 @@
-# Växtträning
+# Naturträning
 
-En enkel mobilvänlig webbsida för att träna åtta vanliga växter på svenska.
+En enkel mobilvänlig webbsida för att träna växter och vanliga träd på svenska.
 
 ## Växter
 
@@ -13,8 +13,19 @@ En enkel mobilvänlig webbsida för att träna åtta vanliga växter på svenska
 - Groblad
 - Maskros
 
-Sidan använder fritt licensierade bilder från Wikimedia Commons. Bildkällor och licenser visas på webbsidan.
+## Träd
+
+- Björk
+- Tall
+- Gran
+- Asp
+- Rönn
+- Lönn
+- Ek
+- Al
+
+Varje art har flera bilder och en bild väljs slumpmässigt vid varje omgång. Sidan använder Wikimedia Commons -kuvia ja näyttää kuvien lähdelinkit sivun alareunassa.
 
 ## GitHub Pages
 
-Publicera sidan från repositoryts `main`-branch och mappen `/ (root)` under **Settings → Pages**.
+Publicera sidan från önskad branch och mappen `/ (root)` under **Settings → Pages**.
